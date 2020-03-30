@@ -1,0 +1,7 @@
+django-filter
+-U drf-yasg
+-U drf-yasg[validation]
+django-cors-headers
+psycopg2-binary
+
+

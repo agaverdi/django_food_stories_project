@@ -77,7 +77,7 @@ class Order(models.Model):
         ordering = ('owner_order',)
 
     def __str__(self):
-        return self.owner_product
+        return str(self.order_product) if self.order_product else ''
 
 class Question(models.Model):
     owner_question=models.ForeignKey(User, on_delete=models.CASCADE,related_name='questions')
@@ -99,28 +99,13 @@ class Question(models.Model):
         return self.title
 
 
-class Comments(models.Model):
-    usercomment=models.ForeignKey(User,related_name='comments',on_delete=models.CASCADE, )
-    reply_comment=models.ForeignKey('self',on_delete=models.CASCADE, null=True, blank=True, related_name='replycomments')
-    question=models.ForeignKey(Question,on_delete=models.CASCADE, related_name='comments')
-    user_comment_impressions = models.ManyToManyField(User, related_name='user_comment_impressions', )
 
-    comment=models.TextField('comments')
-
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    
-    class Meta:
-        verbose_name= 'koment'
-        verbose_name_plural= 'komentlar'
-        ordering = ('comment',)
-
-    def __str__(self):
-        return self.comment
 
 class CommentsClone(models.Model):
-    comment=models.TextField('comments')
+    comment_owner=models.ForeignKey(User,on_delete=models.CASCADE ,related_name='commentsclone')
+    article=models.ForeignKey('Article', on_delete=models.CASCADE ,related_name='commentsclone')
 
+    comment=models.TextField('comments')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     
@@ -136,13 +121,14 @@ class CommentsClone(models.Model):
 
 
 class Article(models.Model):
+    article_owner=models.ForeignKey(User,on_delete=models.CASCADE,related_name='articles')
     article_tags=models.ManyToManyField(Tags, related_name='articles')
-    article_comments=models.ManyToManyField(CommentsClone,related_name='articles')
+
 
 
     title=models.CharField('Title', max_length=35)
     description=models.TextField('Description')
-    short_description=models.TextField('Description')
+    short_description=models.TextField('Short_Description')
     viewer=models.IntegerField()
     image=models.ImageField(upload_to="users/", null=True, blank=True)
 
@@ -158,7 +144,25 @@ class Article(models.Model):
         return self.title
 
 
+class Comments(models.Model):
+    usercomment=models.ForeignKey(User,related_name='comments',on_delete=models.CASCADE, )
+    reply_comment=models.ForeignKey('self',on_delete=models.CASCADE, null=True, blank=True, related_name='replycomments')
+    question=models.ForeignKey(Question,on_delete=models.CASCADE, related_name='comments')
+    article=models.ForeignKey(Article , on_delete=models.CASCADE ,related_name='comments')
+    user_comment_impressions = models.ManyToManyField(User, related_name='user_comment_impressions', )
 
+    comment=models.TextField('comments')
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        verbose_name= 'koment'
+        verbose_name_plural= 'komentlar'
+        ordering = ('comment',)
+
+    def __str__(self):
+        return self.comment
 
 
 
