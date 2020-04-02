@@ -13,51 +13,30 @@ services:
     environment:
       - LC_ALL=C.UTF-8
 
+  nginx-proxy:
+    image: jwilder/nginx-proxy
+    restart: "always"
+    ports:
+      - "80:80"
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+      - ./nginx/vhost/:/etc/nginx/vhost.d:ro
+      - ./nginx/conf.d/client_max_body_size.conf:/etc/nginx/conf.d/client_max_body_size.conf:ro
+      - ./static/:/code/static/
+      - ./media/:/code/media/
 
-
-# version: '3.5'
-
-# services:
-#   postgres:
-#     container_name: postgres_container
-#     image: postgres
-#     environment:
-#       POSTGRES_USER: ${POSTGRES_USER:-postgres}
-#       POSTGRES_PASSWORD: 12345
-#       PGDATA: /data/postgres
-#     volumes:
-#        - postgres:/data/postgres
-#     ports:
-#       - "5432:5432"
-#     networks:
-#       - postgres
-#     restart: "always" 
-
-
-#   version: "3.1"
-#   services:
-#   nginx-proxy:
-#     image: jwilder/nginx-proxy
-#     restart: "always"
-#     ports:
-#       - "80:80"
-#     volumes:
-#       - /var/run/docker.sock:/tmp/docker.sock:ro
-#       - ./nginx/vhost/:/etc/nginx/vhost.d:ro
-#       - ./nginx/conf.d/client_max_body_size.conf:/etc/nginx/conf.d/client_max_body_size.conf:ro
-#       - ./static/:/code/static/
-#       - ./media/:/code/media/
-#   web:
-#     build: .
-#     restart: "always"
-#     ports:
-#       - "8000:8000"
-#     volumes:
-#       - .:/code/
-#       - ./db.sqlite3:/code/db.sqlite3
-#       - ./static/:/code/static/
-#       - ./media/:/code/media/
-#     environment:
-#       - VIRTUAL_HOST=localhost, 35.225.243.133
-#       - VIRTUAL_PORT=8000
-#       - DEBUG=False
+  web:
+    build: .
+    restart: "always"
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/code/
+      - ./static/:/code/static/
+      - ./media/:/code/media/
+    environment:
+      - VIRTUAL_HOST=localhost, 35.222.113.232
+      - VIRTUAL_PORT=8000
+      - DEBUG=False
+    depends_on:
+      - "postgres"

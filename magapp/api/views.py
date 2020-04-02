@@ -48,7 +48,7 @@ class ArticleViewSet(ModelViewSet):
 
 class CommentViewSet(ModelViewSet):
     permission_classes = [permissions.IsAuthenticated,]
-    queryset = Comments.objects.all()
+    queryset = Comments.objects.filter(reply_comment__isnull=True)
     serializer_class = CommentsReadSerializer
     serializer_classes = {
         'list': CommentsReadSerializer,

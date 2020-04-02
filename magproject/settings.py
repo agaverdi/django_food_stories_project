@@ -23,7 +23,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '!ie+&jchd8c*ul14xpx@#swt66x0e0)+@*dwj1y5ol(fjv2+uy'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False # not os.environ.get('DEBUG', False)
+PROD = not DEBUG
 
 ALLOWED_HOSTS = ['*']
 
@@ -116,16 +117,28 @@ WSGI_APPLICATION = 'magproject.wsgi.application'
 # }
 
 #########################################################################
-DATABASES = {                                                          #
-    'default': {                                                       #
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',            #
-        'NAME': 'mag',                                                 #
-        'USER': 'mag_user',                                            #
-        'PASSWORD': '12345',                                           #
-        'HOST': '127.0.0.1',                                           #
-        'PORT': 5432,                                                  #
-    }                                                                  #
-}                                                                      #
+if PROD:
+    DATABASES = {                                                          #
+        'default': {                                                       #
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',            #
+            'NAME': 'mag',                                                 #
+            'USER': 'mag_user',                                            #
+            'PASSWORD': '12345',                                           #
+            'HOST': 'postgres',                                           #
+            'PORT': 5432,                                                  #
+        }                                                                  #
+    }              
+else:
+    DATABASES = {                                                          #
+        'default': {                                                       #
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',            #
+            'NAME': 'mag',                                                 #
+            'USER': 'mag_user',                                            #
+            'PASSWORD': '12345',                                           #
+            'HOST': '127.0.0.1',                                           #
+            'PORT': 5432,                                                  #
+        }                                                                  #
+    }                                                          #
 #########################################################################
 
 
@@ -166,6 +179,16 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
+
+
+if PROD:
+    STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+else:
+    STATICFILES_DIRS = [
+        os.path.join(BASE_DIR, 'static')
+    ]
+
+
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
