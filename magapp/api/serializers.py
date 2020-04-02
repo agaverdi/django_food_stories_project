@@ -85,7 +85,7 @@ class CommentsCreateSerializer(ModelSerializer):
         fields = [ 
             'id',
             'usercomment',
-            'reply_comment',
+            
             'question',
             'comment',
             'created_at',
