@@ -1,0 +1,15 @@
+version: '3'
+
+services:
+  postgres:
+    container_name: postgres-db
+    image: postgres:9.6.6
+    ports: 
+      - 5432:5432
+    volumes:
+      - ../pgdb:/var/lib/postgresql/data
+    restart: always
+    env_file: ../.env_docker
+    environment:
+      - LC_ALL=C.UTF-8
+
