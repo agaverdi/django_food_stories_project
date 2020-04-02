@@ -148,7 +148,7 @@ class Comments(models.Model):
     usercomment=models.ForeignKey(User,related_name='comments',on_delete=models.CASCADE, )
     reply_comment=models.ForeignKey('self',on_delete=models.CASCADE, null=True, blank=True, related_name='replycomments')
     question=models.ForeignKey(Question,on_delete=models.CASCADE, related_name='comments')
-    user_comment_impressions = models.ManyToManyField(User, related_name='user_comment_impressions', )
+    user_comment_impressions = models.ManyToManyField(User,  blank=True, related_name='user_comment_impressions', )
 
     comment=models.TextField('comments')
 
