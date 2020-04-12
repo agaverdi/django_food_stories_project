@@ -57,8 +57,16 @@ class OrderSerializer(ModelSerializer):
             'id',
             'unitprice',
         ]
-##############################################################
 
+class MessageSerializer(ModelSerializer):
+    class Meta:
+        model=Messages
+        fields=[
+            'id',
+            'message',
+        ]
+
+##############################################################
 
 ##################    COMMENTS      ##########################
 
@@ -85,7 +93,6 @@ class CommentsCreateSerializer(ModelSerializer):
         fields = [ 
             'id',
             'usercomment',
-            
             'question',
             'comment',
             'created_at',
@@ -304,6 +311,62 @@ class ArticleCreateSerializer(ModelSerializer):
     def validate(self, data):
         request = self.context.get('request')
         data['article_owner'] = request.user
+        return super().validate(data)
+
+###################       MESSAGES    ##########################
+
+class MessageReadSerializer(ModelSerializer):
+    sender=UserProfileSerializer()
+
+    class Meta:
+        model = Messages
+        fields=[
+            'id',
+            'sender',
+            'group',
+            'message',
+            'created_at',
+        ]
+
+##################         GROUPS       #########################
+
+class GroupReadSerializer(ModelSerializer):
+    group_users=UserProfileSerializer()
+
+    messages=SerializerMethodField()
+    class Meta:
+        model = Group
+        fields=[
+            'id',
+            'group_users',
+            'messages',
+            'group_name',
+            'created_at',
+        ]
+
+    def get_messages(self, group):
+        return MessageReadSerializer(group.messages.all(),many=True).data
+
+    # def get_group_users(self,users):
+        # all_users_name=User.objects.all()
+        # BUTUN USERLERIN ADDARIN FILTER ELEMEY OLAR?
+        # return UserProfileSerializer(Group.users.all.filter(),many=True).data
+
+class GroupCreateSerializer(ModelSerializer):
+    group_users = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), required=False)
+    
+    class Meta:
+        model = Group
+        fields=[
+            'id',
+            'group_users',
+            'group_name',
+            
+        ]
+    
+    def validate(self, data):
+        request = self.context.get('request')
+        data['group_users'] = request.user
         return super().validate(data)
 
 

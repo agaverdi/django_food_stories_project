@@ -84,3 +84,16 @@ class OrderViewSet(ModelViewSet):
 
     def get_serializer_class(self):
         return self.serializer_classes.get(self.action,self.serializer_classes.get('default'))
+
+class GroupViewSet(ModelViewSet):
+    permission_classes = [permissions.IsAuthenticated,]
+    queryset = Group.objects.all()
+    serializer_class = GroupReadSerializer
+    serializer_classes = {
+        'list': GroupReadSerializer,
+        'retrieve': GroupReadSerializer,
+        'default': GroupCreateSerializer,
+    }
+
+    def get_serializer_class(self):
+        return self.serializer_classes.get(self.action,self.serializer_classes.get('default'))

@@ -105,12 +105,12 @@ class CommentsClone(models.Model):
     comment_owner=models.ForeignKey(User,on_delete=models.CASCADE ,related_name='commentsclone')
     article=models.ForeignKey('Article', on_delete=models.CASCADE ,related_name='commentsclone')
 
-    comment=models.TextField('comments')
+    comment=models.TextField('Comments') 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     
     class Meta:
-        verbose_name= 'komentklon'
+        verbose_name= 'komentklon' 
         verbose_name_plural= 'komentklonlar'
         ordering = ('comment',)
 
@@ -148,9 +148,9 @@ class Comments(models.Model):
     usercomment=models.ForeignKey(User,related_name='comments',on_delete=models.CASCADE, )
     reply_comment=models.ForeignKey('self',on_delete=models.CASCADE, null=True, blank=True, related_name='replycomments')
     question=models.ForeignKey(Question,on_delete=models.CASCADE, related_name='comments')
-    user_comment_impressions = models.ManyToManyField(User,  blank=True, related_name='user_comment_impressions', )
+    user_comment_impressions = models.ManyToManyField(User,  blank=True, related_name='user_comment_impressions')
 
-    comment=models.TextField('comments')
+    comment=models.TextField('Comments')
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -164,27 +164,35 @@ class Comments(models.Model):
         return self.comment
 
 
+class Messages(models.Model):
+    sender=models.ForeignKey(User,on_delete=models.CASCADE,related_name='messages')
+    group=models.ForeignKey('Group',on_delete=models.CASCADE,related_name='messages')
 
+    message=models.TextField('Message')
 
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        verbose_name= 'mesaj'
+        verbose_name_plural= 'mesajlar'
+        ordering = ('message',)
 
+    def __str__(self):
+        return self.sender
 
-# class Story(models.Model):
+class Group(models.Model):
+    group_users=models.ManyToManyField(User ,related_name='users')
 
-#     categoria=models.ForeignKey(Category,on_delete=models.CASCADE,related_name='story')
-#     owner=models.ForeignKey(User,on_delete=models.CASCADE, related_name='stories')
-#     title=models.CharField('title',max_length=30)
-#     description=models.TextField('description')
-#     long_description = RichTextField(default="")
-#     short_description=models.CharField('short-description',max_length=100)
-#     image=models.ImageField
+    group_name=models.CharField('Group-name',max_length=100)
 
-#     created_at = models.DateTimeField(auto_now_add=True)
-#     updated_at = models.DateTimeField(auto_now=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
-    # class Meta:
-    #     verbose_name= 'hekaye'
-    #     verbose_name_plural= 'hekayeler'
-    #     ordering = ('title',)
+    class Meta:
+        verbose_name= 'qrup'
+        verbose_name_plural= 'qruplar'
+        ordering = ('group_name',)
 
-    # def __str__(self):
-    #     return self.title
+    def __str__(self):
+        return self.group_name

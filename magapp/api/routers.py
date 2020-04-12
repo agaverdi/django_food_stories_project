@@ -1,5 +1,5 @@
 from rest_framework.routers import DefaultRouter
-from .views import ProductViewSet ,QuestionViewSet ,ArticleViewSet ,CommentViewSet ,CommentCloneViewSet, OrderViewSet
+from .views import ProductViewSet ,QuestionViewSet ,ArticleViewSet ,CommentViewSet ,CommentCloneViewSet, OrderViewSet, GroupViewSet 
 
 
 router=DefaultRouter()
@@ -11,3 +11,4 @@ router.register(r'articles', ArticleViewSet )
 router.register(r'comments', CommentViewSet )
 router.register(r'comments-clones', CommentCloneViewSet )
 router.register(r'orders', OrderViewSet )
+router.register(r'groups', GroupViewSet )
