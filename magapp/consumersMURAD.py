@@ -25,13 +25,13 @@ class CommentConsumer(AsyncConsumer):
         comment_text = recived_data.get('text')
         user = self.scope['user']
         story = await self.get_story(self.story_id)
-        parent_id = recived_data.get('parent_id')
-        if parent_id != '':
-            parent = await self.get_parent(int(parent_id))
-            await self.create_comment(comment_text, user, story, parent)
-        else:
-            await self.create_comment(comment_text, user, story)
-      
+        # parent_id = recived_data.get('parent_id')
+        # if parent_id != '':
+        #     parent = await self.get_parent(int(parent_id))
+        #     await self.create_comment(comment_text, user, story, parent)
+        # else:
+        #     await self.create_comment(comment_text, user, story)
+        
         await self.channel_layer.group_send(
             self.room,
             {
@@ -53,9 +53,9 @@ class CommentConsumer(AsyncConsumer):
     def get_story(self, id):
         return Story.objects.get(id=id)
 
-    @database_sync_to_async
-    def get_parent(self, id):
-        return Comment.objects.get(id=id)
+    # @database_sync_to_async
+    # def get_parent(self, id):
+    #     return Comment.objects.get(id=id)
 
     @database_sync_to_async
     def create_comment(self, text, user, story, parent=None):

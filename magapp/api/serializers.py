@@ -331,7 +331,7 @@ class MessageReadSerializer(ModelSerializer):
 ##################         GROUPS       #########################
 
 class GroupReadSerializer(ModelSerializer):
-    group_users=UserProfileSerializer()
+    group_users=UserProfileSerializer(many=True)
 
     messages=SerializerMethodField()
     class Meta:
@@ -350,10 +350,10 @@ class GroupReadSerializer(ModelSerializer):
     # def get_group_users(self,users):
         # all_users_name=User.objects.all()
         # BUTUN USERLERIN ADDARIN FILTER ELEMEY OLAR?
-        # return UserProfileSerializer(Group.users.all.filter(),many=True).data
+        # return UserProfileSerializer(Group.user.all(),many=True).data
 
 class GroupCreateSerializer(ModelSerializer):
-    group_users = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), required=False)
+    # group_users = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), required=False)
     
     class Meta:
         model = Group
@@ -364,9 +364,9 @@ class GroupCreateSerializer(ModelSerializer):
             
         ]
     
-    def validate(self, data):
-        request = self.context.get('request')
-        data['group_users'] = request.user
-        return super().validate(data)
+    # def validate(self, data):
+    #     request = self.context.get('request')
+    #     data['group_users'] = request.user
+    #     return super().validate(data)
 
 

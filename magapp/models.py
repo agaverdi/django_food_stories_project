@@ -59,7 +59,7 @@ class Product(models.Model):
     def __str__(self):
         return self.product_name
 
-# null true olmalidi yoxsa false
+
 
 class Order(models.Model):
     owner_order=models.ForeignKey(User , on_delete=models.CASCADE,related_name='orders')
@@ -179,7 +179,7 @@ class Messages(models.Model):
         ordering = ('message',)
 
     def __str__(self):
-        return self.sender
+        return self.sender.username
 
 class Group(models.Model):
     group_users=models.ManyToManyField(User ,related_name='users')
@@ -196,3 +196,5 @@ class Group(models.Model):
 
     def __str__(self):
         return self.group_name
+
+

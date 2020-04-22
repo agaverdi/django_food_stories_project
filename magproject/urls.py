@@ -30,6 +30,8 @@ urlpatterns = [
     path('api/', include('magapp.api.urls', namespace='magapp')),
     path('chat/', include('magapp.urls', namespace='chatapp')),
 
+   
+
     re_path(r'^rest-auth/', include('rest_auth.urls')),
     re_path(r'^rest-auth/registration/', include('rest_auth.registration.urls')),
     re_path(r'^swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
