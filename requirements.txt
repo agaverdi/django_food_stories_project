@@ -22,7 +22,7 @@ jsonschema==3.2.0
 MarkupSafe==1.1.1
 oauthlib==3.1.0
 packaging==20.3
-Pillow==7.0.0
+Pillow==8.2.0
 psycopg2-binary==2.8.4
 pyparsing==2.4.6
 pyrsistent==0.16.0
